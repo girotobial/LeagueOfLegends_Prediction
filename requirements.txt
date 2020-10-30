@@ -1,0 +1,6 @@
+# external requirements
+requests
+pymongo
+pandas
+numpy
+sklearn

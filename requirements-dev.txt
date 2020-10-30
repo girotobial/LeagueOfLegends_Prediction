@@ -1,0 +1,13 @@
+-e .
+
+requests
+pymongo
+pandas
+numpy
+sklearn
+flake8
+isort
+black
+pytest
+pytest-cov
+tox
