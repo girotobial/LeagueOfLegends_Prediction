@@ -6,6 +6,7 @@ pandas
 numpy
 sklearn
 flake8
+flake8-bugbear
 isort
 black
 pytest
