@@ -1,11 +1,7 @@
 import unittest.mock as mock
 
 import pytest
-
-
-@pytest.fixture(autouse=True)
-def no_requests(monkeypatch):
-    monkeypatch.delattr("requests.sessions.Session.request")
+import requests
 
 
 @pytest.fixture
@@ -16,6 +12,39 @@ def mock_get(monkeypatch) -> mock.MagicMock:
         m.setattr("requests.Response.raise_for_status", mock_req)
 
         yield mock_req
+
+
+class MockResponse:
+    def __init__(self, status_pass: bool):
+        self.status_pass = status_pass
+
+    def raise_for_status(self):
+        if not self.status_pass:
+            raise requests.HTTPError
+
+    @staticmethod
+    def json():
+        return {"mock_key": "mock_response"}
+
+
+@pytest.fixture
+def mock_response_ok(monkeypatch):
+    """Requests.get() mocked to return {'mock_key':'mock_response'}."""
+
+    def mock_get(*args, **kwargs):
+        return MockResponse(True)
+
+    monkeypatch.setattr("requests.get", mock_get)
+
+
+@pytest.fixture
+def mock_response_fail(monkeypatch):
+    """Requests.get() mocked to return response with failed status"""
+
+    def mock_get(*args, **kwargs):
+        return MockResponse(False)
+
+    monkeypatch.setattr("request.get", mock_get)
 
 
 class MockAPI:
