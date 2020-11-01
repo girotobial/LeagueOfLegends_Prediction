@@ -47,12 +47,14 @@ class Riot(API):
         self.key = key
 
     def region(self, region: str):
-        self.base_url = f"https://{region}.api.riotgames.com/lol/league/v4"
+        self.base_url = f"https://{region}.api.riotgames.com/lol/"
         return self
 
     def get_player_from_name(self, summoner_name: str) -> dict:
-        end_point = f"/lol/summoner/v4/summoners/by-name/{summoner_name}"
-        data = self._call(end_point).json()
+        end_point = (
+            f"summoner/v4/summoners/by-name/{summoner_name}" f"?api_key={self.key}"
+        )
+        data = self._call(self.base_url + end_point).json()
         return data
 
     def get_role(self):
@@ -75,7 +77,23 @@ class Riot(API):
 class FakeRiot(API):
     """Fakes the riot API for the purposes of testing"""
 
-    # TODO
+    def __init__(self, key: str):
+        self.key = key
+
+    def region(self, region: str):
+        return self
+
+    def get_player_from_name(self, summoner_name: str) -> dict:
+        response = dict(
+            accountId="0" * 56,
+            profileIconId=1,
+            revisionDate=1604187079,
+            name=summoner_name,
+            id="1" * 63,
+            puuid="2" * 78,
+            summonerLevel=30,
+        )
+        return response
 
     def get_historic_soloq(self):
         # TODO
