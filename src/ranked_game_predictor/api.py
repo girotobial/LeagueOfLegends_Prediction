@@ -85,7 +85,10 @@ class Riot(API):
             Masteries for the given summoner sorted by mastery points descending
             the key is the champion name and the value is the mastery points.
         """
-        end_point = f"{self.base_url}champion-mastery/v4/champion-masteries/by-summoner/{summoner_id}?api_key={self.key}"
+        end_point = (
+            f"{self.base_url}champion-mastery/v4/champion-masteries/"
+            f"by-summoner/{summoner_id}?api_key={self.key}"
+        )
         response = self._call(end_point).json()
 
         if nchamps is not None:
