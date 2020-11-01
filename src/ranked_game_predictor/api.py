@@ -2,8 +2,11 @@
 
 import logging
 import time
+from typing import Dict, Optional
 
 import requests
+
+from .constants import champion_names
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +48,7 @@ class Riot(API):
 
     def __init__(self, key: str):
         self.key = key
+        self._champions = None
 
     def region(self, region: str):
         self.base_url = f"https://{region}.api.riotgames.com/lol/"
@@ -63,51 +67,35 @@ class Riot(API):
         # TODO
         pass
 
-    def get_mastery(self):
-        # TODO
-        pass
+    def get_mastery(
+        self, summoner_id: str, nchamps: Optional[int] = None
+    ) -> Dict[str, int]:
+        """Request mastery points by champion for the given summoner.
 
-    def get_history(self):
-        # TODO
-        pass
+        Parameters
+        ----------
+        summoner_id : str
+            Summoner ID associated with the player
+        nchamps : int, optional
+            Number of champions to return, by default all champions are returned.
 
+        Returns
+        -------
+        Dict[str, int]
+            Masteries for the given summoner sorted by mastery points descending
+            the key is the champion name and the value is the mastery points.
+        """
+        end_point = f"{self.base_url}champion-mastery/v4/champion-masteries/by-summoner/{summoner_id}?api_key={self.key}"
+        response = self._call(end_point).json()
 
-class FakeRiot(API):
-    """Fakes the riot API for the purposes of testing"""
+        if nchamps is not None:
+            response = response[:nchamps]
 
-    def __init__(self, key: str):
-        self.key = key
-
-    def region(self, region: str):
-        return self
-
-    def get_player_from_name(self, summoner_name: str) -> dict:
-        response = dict(
-            accountId="0" * 56,
-            profileIconId=1,
-            revisionDate=1604187079,
-            name=summoner_name,
-            id="1" * 63,
-            puuid="2" * 78,
-            summonerLevel=30,
-        )
-        return response
-
-    def get_historic_soloq(self):
-        # TODO
-        pass
-
-    def get_side(self):
-        # TODO
-        pass
-
-    def get_role(self):
-        # TODO
-        pass
-
-    def get_rank(self):
-        # TODO
-        pass
+        masteries = {
+            champion_names.get(row["championId"]): row["championPoints"]
+            for row in response
+        }
+        return masteries
 
     def get_history(self):
         # TODO

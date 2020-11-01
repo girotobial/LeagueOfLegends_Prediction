@@ -34,13 +34,11 @@ class TestRiot:
 
     def test_get_player_from_name_response(self, riot, mock_response_ok):
         riot.region("euw1")
-        assert riot.get_player_from_name("not a player") == {
-            "mock_key": "mock_response"
-        }
+        assert riot.get_player_from_name("not a player") == 1
 
     def test_get_mastery_response(self, riot, mock_response_ok):
         riot.region("euw1")
-        assert riot.get_mastery("not a player") == {"mock_key": "mock_response"}
+        assert riot.get_mastery("not a player") == {"Annie": 1}
 
     def test_get_rank_response(self, riot, mock_response_ok):
         riot.region("euw1")

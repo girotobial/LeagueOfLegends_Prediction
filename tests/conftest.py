@@ -24,12 +24,25 @@ class MockResponse:
 
     @staticmethod
     def json():
-        return {"mock_key": "mock_response"}
+        return [
+            {
+                "summonerId": 1,
+                "championId": 1,
+                "championPoints": 1,
+            }
+        ]
 
 
 @pytest.fixture
 def mock_response_ok(monkeypatch):
-    """Requests.get() mocked to return {'mock_key':'mock_response'}."""
+    """
+    Requests.get() mocked to return
+    {
+        "summonerId": 1,
+        "championId": 1,
+        "championPoints": 1,
+    }
+    """
 
     def mock_get(*args, **kwargs):
         return MockResponse(True)
