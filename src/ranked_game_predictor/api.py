@@ -51,9 +51,7 @@ class Riot(API):
         return self
 
     def get_player_from_name(self, summoner_name: str) -> dict:
-        end_point = (
-            f"summoner/v4/summoners/by-name/{summoner_name}" f"?api_key={self.key}"
-        )
+        end_point = f"summoner/v4/summoners/by-name/{summoner_name}?api_key={self.key}"
         data = self._call(self.base_url + end_point).json()
         return data
 

@@ -33,15 +33,19 @@ class TestRiot:
         assert test_string in riot.base_url
 
     def test_get_player_from_name_response(self, riot, mock_response_ok):
+        riot.region("euw1")
         assert riot.get_player_from_name("not a player") == {
             "mock_key": "mock_response"
         }
 
     def test_get_mastery_response(self, riot, mock_response_ok):
+        riot.region("euw1")
         assert riot.get_mastery("not a player") == {"mock_key": "mock_response"}
 
     def test_get_rank_response(self, riot, mock_response_ok):
+        riot.region("euw1")
         assert riot.get_rank("not a player") == {"mock_key": "mock_response"}
 
     def test_get_soloq_history_response(self, riot, mock_response_ok):
+        riot.region("euw1")
         assert riot.get_soloq_history("not a player") == {"mock_key": "mock_response"}
